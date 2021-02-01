@@ -2,9 +2,11 @@ package pubsub
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"github.com/mr-tron/base58"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -978,7 +980,9 @@ func (p *PubSub) handleIncomingRPC(rpc *RPC) {
 
 // DefaultMsgIdFn returns a unique ID of the passed Message
 func DefaultMsgIdFn(pmsg *pb.Message) string {
-	return string(pmsg.GetFrom()) + string(pmsg.GetSeqno())
+	//return string(pmsg.GetFrom()) + string(pmsg.GetSeqno())
+	hash := sha256.Sum256([]byte(pmsg.String()))
+	return base58.Encode(hash[:])
 }
 
 // pushMsg pushes a message performing validation as necessary

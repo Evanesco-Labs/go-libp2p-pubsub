@@ -138,7 +138,6 @@ func (t *Topic) Subscribe(opts ...SubOpt) (*Subscription, error) {
 	if t.closed {
 		return nil, ErrTopicClosed
 	}
-
 	sub := &Subscription{
 		topic: t.topic,
 		ch:    make(chan *Message, 32),
@@ -217,18 +216,17 @@ func (t *Topic) Publish(ctx context.Context, data []byte, opts ...PubOpt) error 
 		From:  nil,
 		Seqno: nil,
 	}
-	if t.p.signID != "" {
-		m.From = []byte(t.p.signID)
-		m.Seqno = t.p.nextSeqno()
-	}
-	if t.p.signKey != nil {
-		m.From = []byte(t.p.signID)
-		err := signMessage(t.p.signID, t.p.signKey, m)
-		if err != nil {
-			return err
-		}
-	}
-
+	//if t.p.signID != "" {
+	//	m.From = []byte(t.p.signID)
+	//	m.Seqno = t.p.nextSeqno()
+	//}
+	//if t.p.signKey != nil {
+	//	m.From = []byte(t.p.signID)
+	//	err := signMessage(t.p.signID, t.p.signKey, m)
+	//	if err != nil {
+	//		return err
+	//	}
+	//}
 	pub := &PublishOptions{}
 	for _, opt := range opts {
 		err := opt(pub)
